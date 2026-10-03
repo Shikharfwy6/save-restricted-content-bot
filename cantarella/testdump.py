@@ -11,3 +11,12 @@ async def testdump(client, message):
         await message.reply(f"OK, bheja gaya: {target}")
     except Exception as e:
         await message.reply(f"Error: {e}")
+        @Client.on_message(filters.channel)
+async def channel_seen(client, message):
+    for a in ADMINS:
+        try:
+            await client.send_message(
+                a, f"Channel dikha: {message.chat.title}\nID: {message.chat.id}"
+            )
+        except Exception:
+            pass
