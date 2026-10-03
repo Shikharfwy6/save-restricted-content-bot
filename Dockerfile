@@ -7,8 +7,9 @@
 # Dhanpal Sharma
 # GitHub: https://github.com/LastPerson07
 # ========================================================
-
-FROM python:3.10.13-slim-bullseye
+FROM python:3.10-slim-bookworm
+# Or pin a recent patch release:
+# FROM python:3.10.16-slim-bookworm
 
 # Prevent Python from creating .pyc files
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -19,9 +20,13 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Install minimal system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates \
+RUN sed -i 's/deb.debian.org/archive.debian.org/g' /etc/apt/sources.list \
+    && sed -i 's/security.debian.org/archive.debian.org/g' /etc/apt/sources.list \
+    && sed -i '/debian-security/d' /etc/apt/sources.list \
+    && apt-get update -o Acquire::Check-Valid-Until=false \
+    && apt-get install -y --no-install-recommends ca-certificates \
     && rm -rf /var/lib/apt/lists/*
+    
 
 # Install Python dependencies
 COPY requirements.txt .
