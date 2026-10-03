@@ -20,12 +20,10 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 # Install minimal system dependencies
-RUN sed -i 's/deb.debian.org/archive.debian.org/g' /etc/apt/sources.list \
-    && sed -i 's/security.debian.org/archive.debian.org/g' /etc/apt/sources.list \
-    && sed -i '/debian-security/d' /etc/apt/sources.list \
-    && apt-get update -o Acquire::Check-Valid-Until=false \
-    && apt-get install -y --no-install-recommends ca-certificates \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
+    
     
 
 # Install Python dependencies
